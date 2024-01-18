@@ -1,0 +1,42 @@
+<?php
+
+$id = null;
+
+if (isset($_GET["id"])) {
+    $id=$_GET["id"];
+    
+    $query = $db->prepare('SELECT * FROM users WHERE id = :id');
+    $query->bindParam(':id', $id, PDO::PARAM_INT);
+    $query->execute();
+    
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+}
+
+?>
+
+
+<main class="container py-5">
+    <h1>
+        Modifier un utilisateur
+    </h1>
+    <form class="mt-5" action="logic/edit-user.php" method="post">
+        <input type="hidden" id="userId" name="userId" value=<?= $id ?> />
+        <fieldset>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value='<?php if (isset($user["email"])) { echo $user["email"]; } ?>'/>
+        </fieldset>
+        <fieldset>
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" id="password" name="password" class="form-control" value='<?php if (isset($user["password"])) { echo $user["password"]; } ?>'/>
+        </fieldset>
+        <fieldset>
+            <label for="firstName" class="form-label">Prénom</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" value='<?php if (isset($user["first_name"])) { echo $user["first_name"]; } ?>'/>
+        </fieldset>
+        <fieldset>
+            <label for="lastName" class="form-label">Nom</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" value='<?php if (isset($user["last_name"])) { echo $user["last_name"]; } ?>'/>
+        </fieldset>
+        <button type="submit" class="mt-3 btn btn-primary">Sauvegarder</button>
+    </form>
+</main>
